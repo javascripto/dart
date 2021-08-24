@@ -17,7 +17,11 @@ void main() {
   dynamic any = 123; // int
   any = "abc"; // String
 
-  print([name2, name3, age2, any]);
+  // Tipo num pode receber valores inteiros ou reais
+  num number = 1;
+  number = 1.2;
+
+  print([name2, name3, age2, any, number]);
 
   print(doubleIssue);
   print('Olá, meu nome é ${name}');
@@ -31,8 +35,24 @@ void main() {
   // Objetos
   Person person = new Person(name, age);
   person.sayHi();
+
+  // Maps and Lists
+  Map<String, String> map = {
+    'name': 'John'
+  };
+  List<String> list = ['John', 'Paul'];
+
+  print([map, list]);
+
+  // enums
+  print([...Color.values, Color.BLUE]);
 }
 
+enum Color {
+  RED,
+  GREEN,
+  BLUE
+}
 
 class Person {
   late int age;

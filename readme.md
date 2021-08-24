@@ -39,6 +39,9 @@ void main() {
   String text = 'Hello';
   bool isTrue = true;
 
+  num number = 1.2;
+  number = 1;
+
   const constant = 3.14;
   var variable = 1; variable = 2;
   dynamic typeVariable = 1; typeVariable = '1';
