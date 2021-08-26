@@ -1,5 +1,7 @@
+import 'package:dartbank/Client.dart';
+
 class BankAccount {
-  late String owner;
+  late Client owner;
   late int agency;
   late int accountNumber;
   late double balance = 0.0;
@@ -7,7 +9,7 @@ class BankAccount {
   bool get isBalancePositive => balance > 0;
 
   BankAccount(
-    String owner,
+    Client owner,
     int agency,
     int accountNumber,
     { double balance = 0.0 } // default value / optional initialization with named argument
@@ -37,6 +39,6 @@ class BankAccount {
 
   @override
   String toString() {
-    return '{owner: $owner, balance: $balance}';
+    return '{owner: ${owner.name}, balance: $balance}';
   }
 }
