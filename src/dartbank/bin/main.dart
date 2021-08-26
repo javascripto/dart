@@ -1,5 +1,6 @@
+import 'package:dartbank/BankAccount.dart';
 
 void main(List<String> arguments) {
-  print('Hello darkBank');
+  print(BankAccount('John', 1, 1));
 }
 
