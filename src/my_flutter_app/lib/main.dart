@@ -1,16 +1,7 @@
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(MyApp());
-
-//   Widget widget = Center(child: Text("Olá mundo!", textDirection: TextDirection.ltr));
-//   runApp(widget);
-// }
-
 
 import 'package:flutter/material.dart';
 
-Widget app = Center(
+const simpleApp = Center(
   child: Text(
     'Hello, world!',
     textDirection: TextDirection.ltr,
@@ -18,18 +9,25 @@ Widget app = Center(
 );
 
 void main() {
-  runApp(app);
+  // runApp(simpleApp);
+  runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   @override
   build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.green,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.greenAccent.shade700,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.greenAccent.shade700
+        )
       ),
-      home: MyHomePage(title: 'Flutter Multiplataforma'),
+      home: MyHomePage(title: 'Flutter App multiplataforma'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -47,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   _incrementCounter() {
+    print(Colors.greenAccent);
+
     setState(() => _counter++);
     print("Counter: $_counter");
   }
