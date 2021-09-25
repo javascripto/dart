@@ -69,7 +69,8 @@ class TransferenceItem extends StatelessWidget {
 }
 
 class TransferenceForm extends StatelessWidget {
-  const TransferenceForm({Key? key}) : super(key: key);
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _accountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +84,7 @@ class TransferenceForm extends StatelessWidget {
         child: Column(
           children: <Widget>[
             TextField(
+              controller: _accountController,
               decoration: InputDecoration(
                 labelText: 'Número da conta',
                 hintText: '0000',
@@ -91,16 +93,30 @@ class TransferenceForm extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
             TextField(
+              controller: _amountController,
               decoration: InputDecoration(
                 labelText: 'Valor',
                 hintText: '0.00',
-                prefixIcon: Icon(Icons.monetization_on),  
+                prefixIcon: Icon(Icons.monetization_on),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  var account = int.tryParse(_accountController.text);
+                  var amount = double.tryParse(_amountController.text);
+                  if (amount == null || account == null) {
+                    return debugPrint('Não foi possível parsear valores');
+                  }
+                  var transference = Transference(
+                    account: account,
+                    amount: amount,
+                  );
+                  debugPrint(transference.toString());
+                  _amountController.clear();
+                  _accountController.clear();
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Confirmar'),
@@ -116,7 +132,13 @@ class TransferenceForm extends StatelessWidget {
 }
 
 class Transference {
-  final String account;
-  final String amount;
+  final int account;
+  final double amount;
+
   Transference({ required this.account, required this.amount });
+
+  @override
+  String toString() {
+    return 'Transference{account: $account, amount: $amount}';
+  }
 }
