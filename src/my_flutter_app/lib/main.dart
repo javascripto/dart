@@ -18,12 +18,16 @@ class App extends StatelessWidget {
   }
 }
 
-class TransferenceList extends StatelessWidget {
-  final transferenceList = <Transference>[
-    Transference(account: 1000, amount: 100.00),
-    Transference(account: 1000, amount: 300.00),
-  ]; 
+class TransferenceList extends StatefulWidget {
+  final transferenceList = <Transference>[];
 
+  @override
+  State<TransferenceList> createState() {
+    return _TransferenceListState();
+  }
+}
+
+class _TransferenceListState extends State<TransferenceList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +38,9 @@ class TransferenceList extends StatelessWidget {
       // Column não é adequado para renderizar listas de items, usamos ListView.
       // ListView não é usado para listas dinâmicas, nesse caso usamos ListView.builder.
       body: ListView.builder(
-        itemCount: transferenceList.length,
+        itemCount: widget.transferenceList.length,
         itemBuilder: (context, index) {
-          return TransferenceItem(transference: transferenceList[index]);
+          return TransferenceItem(transference: widget.transferenceList[index]);
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -47,16 +51,16 @@ class TransferenceList extends StatelessWidget {
     );
   }
 
-  void _openTransferenceForm(BuildContext context) {
-    Navigator.push<Transference>(
+  void _openTransferenceForm(BuildContext context) async {
+    final transference = await Navigator.push<Transference>(
       context,
       MaterialPageRoute(
         builder: (context) => TransferenceForm(),
       ),
-    ).then((transference) {
-      if (transference == null) return;
-      transferenceList.add(transference);
-      showAlert(context, title: 'Sucesso', message: '$transference');
+    );
+    if (transference == null) return;
+    setState(() {
+      widget.transferenceList.add(transference);
     });
   }
 }
@@ -137,10 +141,13 @@ class TransferenceForm extends StatelessWidget {
       account: account,
       amount: amount,
     );
-    _amountController.clear();
-    _accountController.clear();
-    debugPrint('Transferência criada! Enviando para lista de transferências');
-    Navigator.pop(context, transference);
+    showAlert(context,
+      title: 'Transferencia criada!',
+      message: 'Transferência para conta ${transference.account} no valor de ${transference.amount}',
+      onDismiss: () {
+        Navigator.pop(context, transference);
+      },
+    );
   }
 }
 
@@ -179,7 +186,7 @@ class Editor extends StatelessWidget {
   }
 }
 
-void showAlert(BuildContext context, { String? title, String message = '', String buttonText = 'OK' }) {
+void showAlert(BuildContext context, { String? title, String message = '', String buttonText = 'OK', Function? onDismiss }) {
   debugPrint(message);
   showDialog(context: context, builder: (context) {
     return AlertDialog(
@@ -190,6 +197,7 @@ void showAlert(BuildContext context, { String? title, String message = '', Strin
           child: Text(buttonText),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop('dialog');
+            if (onDismiss != null) onDismiss();
           },
         ),
       ],
