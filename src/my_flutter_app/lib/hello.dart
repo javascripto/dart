@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-Widget HelloWorld() => Center(
+Widget helloWorld() => Center(
   child: Text(
     'Hello, world!',
     textDirection: TextDirection.ltr,
