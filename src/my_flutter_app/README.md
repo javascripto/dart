@@ -58,3 +58,32 @@ void main() {
   );
 }
 ```
+
+## Used Widgets
+
+- MaterialApp base
+  - MaterialApp
+  - Scaffold
+  - AppBar
+
+- Buttons and Inputs
+  - ElevatedButton
+  - TextField
+  - FloatingActionButton
+
+- Text and Layout
+  - Text
+  - Row
+  - Column
+  - Padding
+
+- Card and Lists
+  - Card
+  - ListTile
+  - ListView
+  - ListView.builder
+  - SingleChildScrollView
+  
+- Other
+  - AlertDialog
+  - Icon
