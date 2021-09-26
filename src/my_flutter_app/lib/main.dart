@@ -85,8 +85,15 @@ class TransferenceItem extends StatelessWidget {
   }
 }
 
-class TransferenceForm extends StatelessWidget {
+class TransferenceForm extends StatefulWidget {
+  // Widget transformado em statefull para evitar bugs com o controlador de TextField.
+  @override
+  _TransferenceFormState createState() => _TransferenceFormState();
+}
+
+class _TransferenceFormState extends State<TransferenceForm> {
   final TextEditingController _amountController = TextEditingController();
+
   final TextEditingController _accountController = TextEditingController();
 
   @override
@@ -98,34 +105,37 @@ class TransferenceForm extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
-        child: Column(
-          children: <Widget>[
-            Editor(
-              hint: '0000',
-              label: 'Número da conta',
-              icon: Icons.account_balance,
-              keyboardType: TextInputType.number,
-              controller: _accountController,
-            ),
-            Editor(
+        // Envolver um widget Column com uma scrollview evita bugs na tela horizontal.
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Editor(
+                hint: '0000',
+                label: 'Número da conta',
+                icon: Icons.account_balance,
+                keyboardType: TextInputType.number,
+                controller: _accountController,
+              ),
+              Editor(
                 hint: '0.00',
                 label: 'Valor',
                 icon: Icons.monetization_on,
                 keyboardType: TextInputType.number,
                 controller: _amountController,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: ElevatedButton(
-                onPressed: () => _createTransference(context),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text('Confirmar'),
-                ),
-                style: ButtonStyle(),
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: ElevatedButton(
+                  onPressed: () => _createTransference(context),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text('Confirmar'),
+                  ),
+                  style: ButtonStyle(),
+                ),
+              ),
+            ],
+          ),
         ),
       )
     );
@@ -188,7 +198,7 @@ class Editor extends StatelessWidget {
 
 void showAlert(BuildContext context, { String? title, String message = '', String buttonText = 'OK', Function? onDismiss }) {
   debugPrint(message);
-  showDialog(context: context, builder: (context) {
+  showDialog(context: context, barrierDismissible: false, builder: (context) {
     return AlertDialog(
       title: title != null ? Text(title) : null,
       content: Text(message),
