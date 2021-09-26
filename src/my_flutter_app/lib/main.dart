@@ -83,22 +83,19 @@ class TransferenceForm extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: Column(
           children: <Widget>[
-            TextField(
-              controller: _accountController,
-              decoration: InputDecoration(
-                labelText: 'Número da conta',
-                hintText: '0000',
-                prefixIcon: Icon(Icons.account_balance),
-              ),
+            Editor(
+              hint: '0000',
+              label: 'Número da conta',
+              icon: Icons.account_balance,
               keyboardType: TextInputType.number,
+              controller: _accountController,
             ),
-            TextField(
-              controller: _amountController,
-              decoration: InputDecoration(
-                labelText: 'Valor',
-                hintText: '0.00',
-                prefixIcon: Icon(Icons.monetization_on),
-              ),
+            Editor(
+                hint: '0.00',
+                label: 'Valor',
+                icon: Icons.monetization_on,
+                keyboardType: TextInputType.number,
+                controller: _amountController,
             ),
             Padding(
               padding: EdgeInsets.only(top: 16.0),
