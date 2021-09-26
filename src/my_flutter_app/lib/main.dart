@@ -10,16 +10,29 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
       home: TransferenceList(),
+      theme: ThemeData(
+        primaryColor: Colors.green[900],
+        accentColor: Colors.yellow[600],
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.green[900]),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+          ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.green[900],
+          foregroundColor: Colors.white,
+        ),
+      ),
     );
   }
 }
 
 class TransferenceList extends StatefulWidget {
-  final transferenceList = <Transference>[];
+  final transferenceList = <Transference>[
+    Transference(amount: 123, account: 123),
+  ];
 
   @override
   State<TransferenceList> createState() {
@@ -33,7 +46,6 @@ class _TransferenceListState extends State<TransferenceList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Transferências'),
-        backgroundColor: Colors.green.shade900,
       ),
       // Column não é adequado para renderizar listas de items, usamos ListView.
       // ListView não é usado para listas dinâmicas, nesse caso usamos ListView.builder.
@@ -46,7 +58,6 @@ class _TransferenceListState extends State<TransferenceList> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _openTransferenceForm(context),
-        backgroundColor: Colors.green.shade900,
       ),
     );
   }
@@ -76,7 +87,7 @@ class TransferenceItem extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           Icons.monetization_on,
-          color: Colors.green.shade900,
+          color: Theme.of(context).primaryColor,
         ),
         title: Text('${transference.amount}'),
         subtitle: Text('${transference.account}'),
@@ -101,7 +112,6 @@ class _TransferenceFormState extends State<TransferenceForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Nova transferência'),
-        backgroundColor: Colors.green.shade900,
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -131,7 +141,6 @@ class _TransferenceFormState extends State<TransferenceForm> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text('Confirmar'),
                   ),
-                  style: ButtonStyle(),
                 ),
               ),
             ],
@@ -189,7 +198,23 @@ class Editor extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hint,
         labelText: label,
-        prefixIcon: icon != null ? Icon(icon) : null,
+        prefixIcon: icon != null
+          ? Icon(
+            icon,
+            color: Theme.of(context).primaryColor,
+          )
+          : null,
+        hintStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+        labelStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
       ),
       keyboardType: keyboardType,
     );
