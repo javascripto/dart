@@ -1,5 +1,4 @@
 
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,6 +19,11 @@ class App extends StatelessWidget {
 }
 
 class TransferenceList extends StatelessWidget {
+  final transferenceList = <Transference>[
+    Transference(account: 1000, amount: 100.00),
+    Transference(account: 1000, amount: 300.00),
+  ]; 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,16 +31,13 @@ class TransferenceList extends StatelessWidget {
         title: Text('Transferências'),
         backgroundColor: Colors.green.shade900,
       ),
-      body: Column(
-        children: [
-          TransferenceItem(amount: '100.0', account: '1000'),
-          TransferenceItem(amount: '200.0', account: '1000'),
-        ] + List.generate(4, (index) => (
-          TransferenceItem(
-            amount: (Random().nextInt(100000) / 100).toStringAsFixed(2),
-            account: '1000',
-          )
-        )),
+      // Column não é adequado para renderizar listas de items, usamos ListView.
+      // ListView não é usado para listas dinâmicas, nesse caso usamos ListView.builder.
+      body: ListView.builder(
+        itemCount: transferenceList.length,
+        itemBuilder: (context, index) {
+          return TransferenceItem(transference: transferenceList[index]);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -54,16 +55,16 @@ class TransferenceList extends StatelessWidget {
       ),
     ).then((transference) {
       if (transference == null) return;
+      transferenceList.add(transference);
       showAlert(context, title: 'Sucesso', message: '$transference');
     });
   }
 }
 
 class TransferenceItem extends StatelessWidget {
-  final String amount;
-  final String account;
+  final Transference transference;
 
-  TransferenceItem({ required this.amount, required this.account });
+  TransferenceItem({ required this.transference });
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +74,8 @@ class TransferenceItem extends StatelessWidget {
           Icons.monetization_on,
           color: Colors.green.shade900,
         ),
-        title: Text(amount),
-        subtitle: Text(account),
+        title: Text('${transference.amount}'),
+        subtitle: Text('${transference.account}'),
       ),
     );
   }
