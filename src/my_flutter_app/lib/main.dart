@@ -53,7 +53,8 @@ class TransferenceList extends StatelessWidget {
         builder: (context) => TransferenceForm(),
       ),
     ).then((transference) {
-      debugPrint('$transference');
+      if (transference == null) return;
+      showAlert(context, 'Sucesso', '$transference');
     });
   }
 }
@@ -129,7 +130,7 @@ class TransferenceForm extends StatelessWidget {
     final account = int.tryParse(_accountController.text);
     final amount = double.tryParse(_amountController.text);
     if (amount == null || account == null) {
-      return debugPrint('Não foi possível parsear valores');
+      return showAlert(context, 'Erro', 'Não foi possível parsear valores');
     }
     final transference = Transference(
       account: account,
@@ -150,7 +151,7 @@ class Transference {
 
   @override
   String toString() {
-    return 'Transference{account: $account, amount: $amount}';
+    return 'Transference {\n  account: $account,\n  amount: $amount\n}';
   }
 }
 
@@ -175,4 +176,22 @@ class Editor extends StatelessWidget {
       keyboardType: keyboardType,
     );
   }
+}
+
+void showAlert(BuildContext context, String? title, String content) {
+  debugPrint(content);
+  showDialog(context: context, builder: (context) {
+    return AlertDialog(
+      title: title != null ? Text(title) : null,
+      actions: [
+        ElevatedButton(
+          child: Text('Ok'),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
+          },
+        ),
+      ],
+      content: Text(content),
+    );
+  });
 }
