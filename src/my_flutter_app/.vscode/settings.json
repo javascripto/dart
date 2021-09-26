@@ -1,0 +1,4 @@
+{
+  "dart.flutterRunAdditionalArgs": ["-d", "linux"],
+  "dart.flutterHotReloadOnSave": "always"
+}
