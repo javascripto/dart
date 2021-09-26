@@ -14,7 +14,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: TransferenceForm(),
+      home: TransferenceList(),
     );
   }
 }
@@ -40,10 +40,21 @@ class TransferenceList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () => _openTransferenceForm(context),
         backgroundColor: Colors.green.shade900,
       ),
     );
+  }
+
+  void _openTransferenceForm(BuildContext context) {
+    Navigator.push<Transference>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TransferenceForm(),
+      ),
+    ).then((transference) {
+      debugPrint('$transference');
+    });
   }
 }
 
@@ -76,8 +87,8 @@ class TransferenceForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nova transferencia'),
-        backgroundColor: Colors.green[900],
+        title: Text('Nova transferência'),
+        backgroundColor: Colors.green.shade900,
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -100,20 +111,7 @@ class TransferenceForm extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: ElevatedButton(
-                onPressed: () {
-                  var account = int.tryParse(_accountController.text);
-                  var amount = double.tryParse(_amountController.text);
-                  if (amount == null || account == null) {
-                    return debugPrint('Não foi possível parsear valores');
-                  }
-                  var transference = Transference(
-                    account: account,
-                    amount: amount,
-                  );
-                  debugPrint(transference.toString());
-                  _amountController.clear();
-                  _accountController.clear();
-                },
+                onPressed: () => _createTransference(context),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Confirmar'),
@@ -126,6 +124,22 @@ class TransferenceForm extends StatelessWidget {
       )
     );
   }
+
+  void _createTransference(BuildContext context) {
+    final account = int.tryParse(_accountController.text);
+    final amount = double.tryParse(_amountController.text);
+    if (amount == null || account == null) {
+      return debugPrint('Não foi possível parsear valores');
+    }
+    final transference = Transference(
+      account: account,
+      amount: amount,
+    );
+    _amountController.clear();
+    _accountController.clear();
+    debugPrint('Transferência criada! Enviando para lista de transferências');
+    Navigator.pop(context, transference);
+  }
 }
 
 class Transference {
@@ -137,5 +151,28 @@ class Transference {
   @override
   String toString() {
     return 'Transference{account: $account, amount: $amount}';
+  }
+}
+
+class Editor extends StatelessWidget {
+  final IconData? icon;
+  final String? hint;
+  final String? label;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
+
+  Editor({ this.icon, this.hint, this.label, this.keyboardType, this.controller });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hint,
+        labelText: label,
+        prefixIcon: icon != null ? Icon(icon) : null,
+      ),
+      keyboardType: keyboardType,
+    );
   }
 }
