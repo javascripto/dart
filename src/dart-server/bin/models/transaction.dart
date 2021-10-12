@@ -4,16 +4,17 @@ import 'contact.dart';
 
 class Transaction {
   late final String id;
+  late final String datetime;
   final double value;
   final Contact contact;
-  final String datetime;
 
   Transaction(
       {String? id,
       required this.value,
       required this.contact,
-      required this.datetime}) {
+      String? datetime}) {
     this.id = id ?? Uuid().v4();
+    this.datetime = datetime ?? DateTime.now().toString();
   }
 
   Map<String, dynamic> toJson() => {
