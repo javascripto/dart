@@ -5,23 +5,21 @@ import 'package:shelf/shelf.dart';
 
 import '../models/transaction.dart';
 
-typedef JSON = Map<String, dynamic>;
-
 class TransactionsController {
-  final List<Transaction> _transactions = [];
+  final _transactionsRepository = <Transaction>[];
 
-  Response listTransactions(Request request) {
-    return Response.ok(jsonEncode(_transactions), headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-    });
-  }
+  listTransactions(Request request) => _jsonResponse(_transactionsRepository);
 
-  Future<Response> createTransation(Request request) async {
-    JSON requestBody = jsonDecode(await request.readAsString());
-    Transaction transaction = Transaction.fromJson(requestBody);
-    _transactions.add(transaction);
-    return Response.ok(jsonEncode(transaction), headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-    });
+  createTransation(Request request) async {
+    final parsedBody = jsonDecode(await request.readAsString());
+    final transaction = Transaction.fromJson(parsedBody);
+    _transactionsRepository.add(transaction);
+    return _jsonResponse(transaction);
   }
+}
+
+Response _jsonResponse(dynamic body) {
+  return Response.ok(jsonEncode(body), headers: {
+    HttpHeaders.contentTypeHeader: 'application/json',
+  });
 }
